@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { database } = require('../config/helpers');
-
+const crypto = require('crypto');
 
 // GET ALL ORDERS
 router.get('/', (req, res) => {
@@ -101,10 +101,10 @@ router.post('/new', async(req, res) => {
 
                         } else {
                             data.quantity = 0;
-                            //return;
+                            return;
                         }
 
-                        // Insert order details w.r.t the newly created order Id
+                        // Insert order details for the newly created order Id
                         database.table('orders_details')
                             .insert({
                                 order_id: newOrderId,
@@ -121,15 +121,32 @@ router.post('/new', async(req, res) => {
                 } else {
                     res.json({ message: 'New order failed while adding order details', success: false });
                 }
+                //             res.json({
+                //                 message: `Order successfully placed with order id ${newOrderId}`,
+                //                 success: true,
+                //                 order_id: newOrderId,
+                //                 products: products
+                //             })
+                //         }).catch(err => res.json(err));
+                // } else {
+                //     res.json({ message: 'New order failed', success: false });
+                // }
 
 
             }).catch(err => console.log(err));
     }
+
+    // Payment Gateway
+    // router.post('/payment', (req, res) => {
+    //     setTimeout(() => {
+    //         res.status(200).json({ success: true });
+    //     }, 3000)
+    // });
+
+
+
+
+
 });
-
-
-
-
-
 
 module.exports = router;
